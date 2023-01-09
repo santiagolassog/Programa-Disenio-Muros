@@ -1,0 +1,19 @@
+# version de git -> git --version
+
+# iniciar repo -> git init
+
+# guardar datos en el stage ->                          git add .
+# commit ->                                             git commit -m "primeros pasos git"
+# push -> subir cambios a git ->                        git push -u origin main
+# pull -> traer los datos subidos de otra persona       git pull  origin main
+# git status  -> estado del repo
+
+# descargar (clonar repo)    git clone https://github.com.......
+
+
+
+git add .
+git commit -m "texto"
+git push -u origin main  -> subir
+
+git pull  origin main
