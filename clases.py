@@ -87,10 +87,48 @@ class muro:
         print(fiVc_final)
         return fiVc_final
     
+    """------------------------------------------------
+    # PASO 4: Calcula refuerzo horizontal
+    ------------------------------------------------"""
+    def calcularCuantiaHorizontal(self):
+        vu=self.cargas[1]
+        vc=self.calcularFiVc()
+        
+        ph1=(vu-vc)/(0.75*self.fy*self.calcularAlturaEfectiva(self.geometria[2])*self.geometria[3])
+        ph2=0.0025
+        ph=max(ph1,ph2)
+        print(ph)
+        return ph
+    
+     
+    """------------------------------------------------
+    # PASO 5: Calcula refuerzo vertical
+    ------------------------------------------------"""
+    
+    def calcularCuantiaVertical(self):
+        
+        pv1=0.0025+0.5*(2.5-self.geometria[1]/self.geometria[2])*(self.calcularCuantiaHorizontal()-0.0025)
+        pv2=0.0025
+        pv=max(pv1,pv2)
+        print(pv)
+        return pv
+    
+    def calcularSepVertical(self, n, capas):
+        Avv = self.info_acero.pop(n)
+        Sh1=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
+        Sh2=self.geometria[2]/5*100
+        Sh3=self.geometria[3]*3*100
+        Sh4=45
+        Sh=min(Sh1,Sh2,Sh3,Sh4)
+        print(Sh)
+        return Sh
+    
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:
 -------------------------------------------------------"""   
 m1 = muro(28,420,200,1,[2.5,1.28,15.25],[31.5,3.5,5,0.3,0.05])
 m1.calcularFiVmax(m1.fc,m1.calcularAlturaEfectiva(m1.geometria[2]),m1.geometria[3])
 m1.calcularFiVc()
-       
+m1.calcularCuantiaHorizontal()
+m1.calcularCuantiaVertical()
+m1.calcularSepVertical(6, 2)
