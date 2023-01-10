@@ -22,6 +22,8 @@ class muro:
         self.ld = float(ld)
         self.cargas = list(cargas)
         self.geometria = list(geometria)
+        self.info_acero = {2:32,3:71,4:129,5:199,6:284,7:387,
+                           8:510,9:645,10:819,11:1006,14:1452,18:2581}
     
     def calcularAreaMuro(self):
         area = self.geometria[2] * self.geometria[3] 
@@ -113,15 +115,21 @@ class muro:
         print(pv)
         return pv
     
-    def calcularSepVertical(self, n, capas):
-        Avv = self.info_acero.pop(n)
-        Sh1=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
+    def calcularSeparacion(self, nh, nv, capas):
+        d=self.calcularAlturaEfectiva(self.geometria[2])
+        Avv=self.info_acero.pop(nv)
+        Avh=self.info_acero.pop(nh)
+        ShHorizontal=(Avh/10000*capas)/(self.calcularCuantiaHorizontal()*self.geometria[3])
+        ShVertical=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
         Sh2=self.geometria[2]/5*100
         Sh3=self.geometria[3]*3*100
         Sh4=45
-        Sh=min(Sh1,Sh2,Sh3,Sh4)
-        print(Sh)
-        return Sh
+        ShvFinal=min(ShVertical,Sh2,Sh3,Sh4)
+        ShhFinal=min(ShHorizontal,Sh2,Sh3,Sh4)
+        
+        print(ShvFinal,ShhFinal)
+        
+        return (ShvFinal,ShhFinal)
     
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:
@@ -131,4 +139,4 @@ m1.calcularFiVmax(m1.fc,m1.calcularAlturaEfectiva(m1.geometria[2]),m1.geometria[
 m1.calcularFiVc()
 m1.calcularCuantiaHorizontal()
 m1.calcularCuantiaVertical()
-m1.calcularSepVertical(6, 2)
+m1.calcularSeparacion(3,6,2)
