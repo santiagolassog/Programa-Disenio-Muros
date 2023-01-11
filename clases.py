@@ -25,6 +25,10 @@ class muro:
         self.info_acero = {2:32,3:71,4:129,5:199,6:284,7:387,
                            8:510,9:645,10:819,11:1006,14:1452,18:2581}
     
+    def calcular(self):
+        x = self.fc*2
+        return x
+        
     def calcularAreaMuro(self):
         area = self.geometria[2] * self.geometria[3] 
         return area
@@ -134,9 +138,9 @@ class muro:
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:
 -------------------------------------------------------"""   
-m1 = muro(28,420,200,1,[2.5,1.28,15.25],[31.5,3.5,5,0.3,0.05])
-m1.calcularFiVmax(m1.fc,m1.calcularAlturaEfectiva(m1.geometria[2]),m1.geometria[3])
-m1.calcularFiVc()
-m1.calcularCuantiaHorizontal()
-m1.calcularCuantiaVertical()
-m1.calcularSeparacion(3,6,2)
+# m1 = muro(28,420,200,1,[2.5,1.28,15.25],[31.5,3.5,5,0.3,0.05])
+# m1.calcularFiVmax(m1.fc,m1.calcularAlturaEfectiva(m1.geometria[2]),m1.geometria[3])
+# m1.calcularFiVc()
+# m1.calcularCuantiaHorizontal()
+# m1.calcularCuantiaVertical()
+# m1.calcularSeparacion(3,6,2)
