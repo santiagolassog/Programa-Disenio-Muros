@@ -6,14 +6,16 @@ import clases
 """CLASE PRINCIPAL"""
 class Aplicacion(Frame):
  
+    # Método constructor de la app
     def __init__(self, master=None):
-        # Tamanio de la ventana
-        super().__init__(master,width=750,height=500)
+        
+        # Método principal // Tamaño de la ventana
+        super().__init__(master,width=800,height=500)
         self.master = master
         self.pack()
         self.crear_elementos()
     
-    # FUNCIÓN QUE REALIZA LOS CÁLCULOS
+    # Función que realiza los cálculos
     def get_values(self):
         
         fc = float(self.entryFc.get())
@@ -283,12 +285,14 @@ class Aplicacion(Frame):
         -------------------------------------------------------------------------------"""
         # BOTÓN DE CÁLCULO
         boton = ttk.Button(self, text="Calcular", command=self.get_values)
-        boton.grid(column=4, row=9)
+        boton.grid(column=4, row=5)
         """-------------------------------------------------------------------------------
         -------------------------------------------------------------------------------"""
     
-        
-interface = Tk()
-interface.wm_title("Diseño de Muros")
-app = Aplicacion(interface)
-interface.mainloop()
+
+if __name__ == "__main__":   
+     
+    interface = Tk()
+    interface.wm_title("Diseño de Muros")
+    app = Aplicacion(interface)
+    interface.mainloop()
