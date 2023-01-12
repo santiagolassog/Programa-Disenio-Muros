@@ -25,38 +25,51 @@ class Aplicacion(Frame):
     -------------------------------------------------------------------------------"""
     def get_values(self):
         
-        fc = float(self.entryFc.get())
-      
-        fy = float(self.entryFy.get())
-        ld = float(self.entryld.get())
-        Es = float(self.entryEs.get())
-          
-        Lw = float(self.entryLw.get())
-        Hw = float(self.entryHw.get())
-        hw = float(self.entryhw.get())
-        h = float(self.entryh.get())
-        Cr = float(self.entryCr.get())
-        
-        Pu = float(self.entryPu.get())
-        Mu = float(self.entryMu.get())
-        Vu = float(self.entryVu.get())  
-        
         # Crea un objeto de tipo muro
-        self.m1 = clases.muro(fc,fy,Es,ld,[Pu,Vu,Mu],[Hw,hw,h,Lw,Cr])
+        self.m1 = clases.muro(self.fc,self.fy,self.Es,self.ld,[self.Pu,self.Vu,self.Mu],[self.Hw,self.hw,self.h,self.Lw,self.Cr])
+        #self.m1 = clases.muro(1, 1, 1, 1, [1,1], [1,1])
+        self.aceros = self.m1.info_acero
+        
+        # SE CREA LA LISTA DESPLEGABLE PARA EL NÚMERO DEL ACERO
+        self.lista_acero = ttk.Combobox(self.disenio_cortante,state="readonly",values=[i for i in self.aceros.keys()])
+        self.lista_acero.grid(column=5, row=9, padx=2, pady=2)
+        
+        # SE CREA CAJA DONDE IRA EL VALOR DE LA SEPARACIÓN DE BARRAS DEL ACERO HORIZONTAL
+        self.separación_horizontal=ttk.Label(self.disenio_cortante, text="Separación horizontal: ")
+        self.separación_horizontal.grid(column=4, row=10, padx=2, pady=2)
+        
+        self.unidades_separación_horizontal = ttk.Label(self.disenio_cortante, text="cm")
+        self.unidades_separación_horizontal.grid(column=6, row=10, padx=2, pady=2)
+        
+        self.fc = float(self.entryFc.get())
+      
+        self.fy = float(self.entryFy.get())
+        self.ld = float(self.entryld.get())
+        self.Es = float(self.entryEs.get())
+          
+        self.Lw = float(self.entryLw.get())
+        self.Hw = float(self.entryHw.get())
+        self.hw = float(self.entryhw.get())
+        self.h = float(self.entryh.get())
+        self.Cr = float(self.entryCr.get())
+        
+        self.Pu = float(self.entryPu.get())
+        self.Mu = float(self.entryMu.get())
+        self.Vu = float(self.entryVu.get())  
         
         # Aquí se llaman todos los  para el cálculo
-        d = self.m1.calcularAlturaEfectiva(Lw)
-        Ag = self.m1.calcularAreaMuro()
-        vmax = self.m1.calcularFiVmax(fc, d, h)
-        fiVc = self.m1.calcularFiVc()
-        ph = self.m1.calcularCuantiaHorizontal()
+        self.d = self.m1.calcularAlturaEfectiva(self.Lw)
+        self.Ag = self.m1.calcularAreaMuro()
+        self.vmax = self.m1.calcularFiVmax(self.fc, self.d, self.h)
+        self.fiVc = self.m1.calcularFiVc()
+        self.ph = self.m1.calcularCuantiaHorizontal()
           
         # Aquí se muestran los resultados en la interfaz
-        self.entryd.configure(text="{:.3f}".format(d)) 
-        self.entryAg.configure(text="{:.3f}".format(Ag)) 
-        self.entrycalculoFiVmax.configure(text="{:.3f}".format(vmax)) 
-        self.entrycalculofiVc.configure(text="{:.3f}".format(fiVc)) 
-        self.entrycalculoPh.configure(text="{:.5f}".format(ph)) 
+        self.entryd.configure(text="{:.3f}".format(self.d)) 
+        self.entryAg.configure(text="{:.3f}".format(self.Ag)) 
+        self.entrycalculoFiVmax.configure(text="{:.3f}".format(self.vmax)) 
+        self.entrycalculofiVc.configure(text="{:.3f}".format(self.fiVc)) 
+        self.entrycalculoPh.configure(text="{:.5f}".format(self.ph)) 
         
         # Método que hace la primera verificación
         self.verificar()
@@ -293,6 +306,10 @@ class Aplicacion(Frame):
         self.entrycalculoPh=ttk.Label(self.disenio_cortante, state=DISABLED, width="8")
         self.entrycalculoPh.grid(column=5, row=8, padx=2, pady=2)
         
+        # SE CREA CAJA DONDE IRA EL VALOR DEL ACERO DE REFUERZON HORIZONTAL 
+        self.acero_Horizontal = ttk.Label(self.disenio_cortante, text="Acero horizontal: ")
+        self.acero_Horizontal.grid(column=4, row=9, padx=2, pady=2)
+
         """-------------------------------------------------------------------------------
         -------------------------------------------------------------------------------"""
         # BOTÓN DE CÁLCULO
