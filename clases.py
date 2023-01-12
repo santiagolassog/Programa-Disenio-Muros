@@ -47,12 +47,13 @@ class muro:
     """------------------------------------------------
     # PASO 2: Calcula la altura efectiva del muro
     ------------------------------------------------"""
-    def verificar1(self):
-        fiVmax = calcularFiVmax(self.fc,calcularAlturaEfectiva(self.geometria[2]),self.geometria[3])
-        if self.cargas[1] <= fiVmax:
-            print('Diseñar a cortante')
-        else:
-            print('Redimensionar el muro. Cambiar valores de geometría')
+    # def verificar1(self):
+    #     fiVmax = calcularFiVmax(self.fc,calcularAlturaEfectiva(self.geometria[2]),self.geometria[3])
+    #     return fiVmax
+    #     # if self.cargas[1] <= fiVmax:
+    #     #     print('Diseñar a cortante')
+    #     # else:
+    #     #     print('Redimensionar el muro. Cambiar valores de geometría')
     
     def calcularFiVc(self):
         a = self.cargas[0]

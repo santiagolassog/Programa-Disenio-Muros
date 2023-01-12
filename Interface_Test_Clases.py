@@ -1,6 +1,7 @@
 from tkinter import Tk, Label, Button, Entry, LabelFrame, Frame
 import tkinter as tk
 from tkinter import DISABLED, ttk
+from tkinter import messagebox as ms
 import clases
 
 """-----------------------------------------------------------------------------------
@@ -41,24 +42,44 @@ class Aplicacion(Frame):
         Vu = float(self.entryVu.get())  
         
         # Crea un objeto de tipo muro
-        m1 = clases.muro(fc,fy,Es,ld,[Pu,Vu,Mu],[Hw,hw,h,Lw,Cr])
+        self.m1 = clases.muro(fc,fy,Es,ld,[Pu,Vu,Mu],[Hw,hw,h,Lw,Cr])
         
         # Aquí se llaman todos los  para el cálculo
-        d = m1.calcularAlturaEfectiva(Lw)
-        Ag = m1.calcularAreaMuro()
-        vmax = m1.calcularFiVmax(fc, d, h)
-        fiVc = m1.calcularFiVc()
-        ph = m1.calcularCuantiaHorizontal()
-        
+        d = self.m1.calcularAlturaEfectiva(Lw)
+        Ag = self.m1.calcularAreaMuro()
+        vmax = self.m1.calcularFiVmax(fc, d, h)
+        fiVc = self.m1.calcularFiVc()
+        ph = self.m1.calcularCuantiaHorizontal()
+          
         # Aquí se muestran los resultados en la interfaz
         self.entryd.configure(text="{:.3f}".format(d)) 
         self.entryAg.configure(text="{:.3f}".format(Ag)) 
         self.entrycalculoFiVmax.configure(text="{:.3f}".format(vmax)) 
         self.entrycalculofiVc.configure(text="{:.3f}".format(fiVc)) 
         self.entrycalculoPh.configure(text="{:.5f}".format(ph)) 
-    
+        
+        # Método que hace la primera verificación
+        self.verificar()
     """-------------------------------------------------------------------------------
     -------------------------------------------------------------------------------"""
+    
+    def verificar(self):
+        
+        fc = float(self.entryFc.get())
+        d = self.m1.calcularAlturaEfectiva(float(self.entryLw.get()))
+        h = float(self.entryh.get())
+        
+        Vu = float(self.entryVu.get())
+        Vmax = self.m1.calcularFiVmax(fc, d, h)
+
+        if Vu >= Vmax:
+            self.labelcheck1.configure(text="NO")
+            ms.showerror("Advertencia","No se cumple la primera verificación: Vu <= ΦVmax. Consejo: redimensionar muro ")
+        
+        else:
+            self.labelcheck1.configure(text="SI")
+        
+        
     def crear_elementos_Datos_Iniciales(self):
         
         # SE CREA EL CUADRO DONDE DONDE IRÁN CONTENIDOS LOS DATOS INICIALES PARA EL DISEÑO
@@ -228,7 +249,7 @@ class Aplicacion(Frame):
         self.LabelFiVmax.grid(column=4, row=1, padx=2, pady=2)
         
         # TITULO INTRODUCTORIO A LA VERIFICACIÓN ESTABLECIDA
-        self.LabeltituloCheck1=tk.Label(self.disenio_cortante,text="Verificación: Vu <= ΦVmax:", fg="red")
+        self.LabeltituloCheck1 = tk.Label(self.disenio_cortante,text="Verificación: Vu <= ΦVmax:", fg="red")
         self.LabeltituloCheck1.grid(column=4, row=3, padx=2, pady=2)
         
         # TITULO INTRODUCTORIO A EL CALCULO DEL FIVC FINAL
