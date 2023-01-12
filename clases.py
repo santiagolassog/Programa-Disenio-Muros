@@ -25,9 +25,8 @@ class muro:
         self.info_acero = {2:32,3:71,4:129,5:199,6:284,7:387,
                            8:510,9:645,10:819,11:1006,14:1452,18:2581}
     
-    def calcular(self):
-        x = self.fc*2
-        return x
+    def calcular(self,y):
+        return y
         
     def calcularAreaMuro(self):
         area = self.geometria[2] * self.geometria[3] 

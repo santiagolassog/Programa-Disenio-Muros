@@ -68,9 +68,10 @@ class Aplicacion(Frame):
         # Método que hace la primera verificación
         self.verificar()
         self.lista_acero['values'] = [i for i in self.m1.info_acero.keys()]
-        #self.lista_acero.current(0)
-        
-        print('Barra de acero #: ', self.lista_acero.get())
+
+        #self.lista_acero.current(0)        
+        #print('Barra de acero #: ', self.lista_acero.get())
+        print(self.m1.calcular(self.lista_acero.get()))
         
     """-------------------------------------------------------------------------------
     -------------------------------------------------------------------------------"""
