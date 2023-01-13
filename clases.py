@@ -140,23 +140,32 @@ class muro:
         ShvFinal=min(ShVertical,Sh2,Sh3,Sh4)
         
         return ShvFinal
-  
-    # def calcularSeparacion(self, nh, nv, capas):
-    #     d=self.calcularAlturaEfectiva(self.geometria[2])
-    #     Avv=self.info_acero.pop(nv)
-    #     Avh=self.info_acero.pop(nh)
-    #     ShHorizontal=(Avh/10000*capas)/(self.calcularCuantiaHorizontal()*self.geometria[3])
-    #     ShVertical=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
-    #     Sh2=self.geometria[2]/5*100
-    #     Sh3=self.geometria[3]*3*100
-    #     Sh4=45
-    #     ShvFinal=min(ShVertical,Sh2,Sh3,Sh4)
-    #     ShhFinal=min(ShHorizontal,Sh2,Sh3,Sh4)
-        
-    #     print(ShvFinal,ShhFinal)
-        
-    #     return (ShvFinal,ShhFinal)
     
+    def verificarEb(self):
+        
+        inercia = (self.geometria[3]**3) * (self.geometria[2] / 12)
+        esfuerzo = 0.2 * self.fc
+        fc = (self.cargas[0] / (self.geometria[2]*self.geometria[3])) + ((6*self.cargas[2]) / (self.geometria[3] * (self.geometria[2]**2)))
+        
+        if fc >= esfuerzo:
+            print('SI se requiere elemento de borde')
+        else:
+            print('NO se requiere elemento de borde')
+            
+        return (inercia,esfuerzo,fc)
+    
+    def calcularPuAxial(self,x):
+        puAxial = (self.cargas[0]/2) + (self.cargas[2]/(self.geometria[2] - x))
+        return puAxial
+    
+    def calcularAgBorde(self, b, x):
+        areaEb = b * x
+        return areaEb
+    
+    def calcularAreaAceroFlex(self, Ag, Pu):
+        ast = (0.75 * 0.65 * 0.85 * self.fc * Ag - Pu) / (0.85 * self.fc * 0.75 * 0.65 - 0.75 * 0.65 * self.fy)
+        return ast    
+
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:
 -------------------------------------------------------"""   
@@ -166,3 +175,6 @@ PROGRAMA PRINCIPAL:
 # m1.calcularCuantiaHorizontal()
 # m1.calcularCuantiaVertical()
 # m1.calcularSeparacion(3,6,2)
+
+m1 = muro(28,420,200,1,[4,1.28,15.25],[31.5,3.5,5,0.3,0.05])
+print(m1.calcularAreaAceroFlex(m1.calcularAgBorde(0.5,0.5), m1.calcularPuAxial(0.5)))

@@ -80,6 +80,7 @@ class Aplicacion(Frame):
         sep_h = self.m1.calcularSeparacionHorizontal(select,n_capas)
         print(type(sep_h))
         self.entrySeparacionHorizontal.configure(text="{:.5f}".format(float(sep_h))) 
+
     """-------------------------------------------------------------------------------
     -------------------------------------------------------------------------------"""
     
