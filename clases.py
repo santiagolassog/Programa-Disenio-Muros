@@ -2,7 +2,6 @@
 Importación de librerías
 -------------------------------------------------------"""
 from math import *
-import numpy as np
 """-------------------------------------------------------
 CARACTERÍSTICAS DE UN MURO:
 ----------------------------------------------------------
@@ -119,21 +118,44 @@ class muro:
         print(pv)
         return pv
     
-    def calcularSeparacion(self, nh, nv, capas):
-        d=self.calcularAlturaEfectiva(self.geometria[2])
+    def calcularSeparacionHorizontal(self, nh, capas):
+    
+        Avh = self.info_acero.pop(nh)
+        ShHorizontal = (Avh/10000*capas)/(self.calcularCuantiaHorizontal()*self.geometria[3])
+        Sh2 = self.geometria[2]/5*100
+        Sh3 = self.geometria[3]*3*100
+        Sh4 = 45
+        
+        ShhFinal = min(ShHorizontal,Sh2,Sh3,Sh4)
+        
+        return ShhFinal
+    
+    def calcularSeparacionVertical(self,nv, capas):
+        
         Avv=self.info_acero.pop(nv)
-        Avh=self.info_acero.pop(nh)
-        ShHorizontal=(Avh/10000*capas)/(self.calcularCuantiaHorizontal()*self.geometria[3])
         ShVertical=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
         Sh2=self.geometria[2]/5*100
         Sh3=self.geometria[3]*3*100
         Sh4=45
         ShvFinal=min(ShVertical,Sh2,Sh3,Sh4)
-        ShhFinal=min(ShHorizontal,Sh2,Sh3,Sh4)
         
-        print(ShvFinal,ShhFinal)
+        return ShvFinal
+  
+    # def calcularSeparacion(self, nh, nv, capas):
+    #     d=self.calcularAlturaEfectiva(self.geometria[2])
+    #     Avv=self.info_acero.pop(nv)
+    #     Avh=self.info_acero.pop(nh)
+    #     ShHorizontal=(Avh/10000*capas)/(self.calcularCuantiaHorizontal()*self.geometria[3])
+    #     ShVertical=(Avv/10000*capas)/(self.calcularCuantiaVertical()*self.geometria[3])
+    #     Sh2=self.geometria[2]/5*100
+    #     Sh3=self.geometria[3]*3*100
+    #     Sh4=45
+    #     ShvFinal=min(ShVertical,Sh2,Sh3,Sh4)
+    #     ShhFinal=min(ShHorizontal,Sh2,Sh3,Sh4)
         
-        return (ShvFinal,ShhFinal)
+    #     print(ShvFinal,ShhFinal)
+        
+    #     return (ShvFinal,ShhFinal)
     
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:

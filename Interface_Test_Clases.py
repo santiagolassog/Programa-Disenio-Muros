@@ -49,7 +49,7 @@ class Aplicacion(Frame):
         Vu = float(self.entryVu.get())  
         
         # Crea un objeto de tipo muro
-        self.m1 = clases.muro(fc,fy,Es,ld,[Pu,Vu,Mu],[Hw,hw,h,Lw,Cr])
+        self.m1 = clases.muro(fc,fy,Es,ld,[Pu,Vu,Mu],[Hw,hw,Lw,h,Cr])
         
         # Aquí se llaman todos los  para el cálculo
         d = self.m1.calcularAlturaEfectiva(Lw)
@@ -71,8 +71,15 @@ class Aplicacion(Frame):
 
         #self.lista_acero.current(0)        
         #print('Barra de acero #: ', self.lista_acero.get())
-        print(self.m1.calcular(self.lista_acero.get()))
         
+        select = int(self.lista_acero.get())
+        n_capas = int(self.entryNcapas.get())
+
+        print('Acero seleccionado: ',select,' | # de Capas: ',n_capas)
+        #print(self.m1.calcularSeparacionHorizontal(select,n_capas))
+        sep_h = self.m1.calcularSeparacionHorizontal(select,n_capas)
+        print(type(sep_h))
+        self.entrySeparacionHorizontal.configure(text="{:.5f}".format(float(sep_h))) 
     """-------------------------------------------------------------------------------
     -------------------------------------------------------------------------------"""
     
@@ -306,17 +313,36 @@ class Aplicacion(Frame):
         self.entrycalculoPh=ttk.Label(self.disenio_cortante, state=DISABLED, width="8")
         self.entrycalculoPh.grid(column=5, row=8, padx=2, pady=2)
         
+        # SE CREA CAJA DONDE SE ESCOGE LA BARRA A EMPLEAR EN EL REFUERZO HORIZONTAL
+        
+        self.acero_horizontal=ttk.Label(self.disenio_cortante, text="N° Barra de acero: ")
+        self.acero_horizontal.grid(column=4, row=9, padx=2, pady=2)
+        
+        
+        
+        #SE CREA CAJA DONDE VA CONTENIDO EN NUMERO DE CAPAS QUE SE EMPLEARAN
+        
+        self.nCapas=ttk.Label(self.disenio_cortante, text="Número de capas: ")
+        self.nCapas.grid(column=4, row=10, padx=2, pady=2)
+        
+        self.entryNcapas = ttk.Entry(self.disenio_cortante)
+        self.entryNcapas.grid(column=5, row=10, padx=2, pady=2)
+        
+        
         # SE CREA CAJA DONDE IRA EL VALOR DE LA SEPARACIÓN DE BARRAS DEL ACERO HORIZONTAL        
         self.separación_horizontal=ttk.Label(self.disenio_cortante, text="Separación horizontal: ")
-        self.separación_horizontal.grid(column=4, row=10, padx=2, pady=2)
+        self.separación_horizontal.grid(column=4, row=11, padx=2, pady=2)
+        
+        self.entrySeparacionHorizontal = ttk.Label(self.disenio_cortante)
+        self.entrySeparacionHorizontal.grid(column=5, row=11, padx=2, pady=2)
         
         self.unidades_separación_horizontal = ttk.Label(self.disenio_cortante, text="cm")
-        self.unidades_separación_horizontal.grid(column=6, row=10, padx=2, pady=2)
+        self.unidades_separación_horizontal.grid(column=6, row=11, padx=2, pady=2)
         
         # SE CREA LA LISTA DESPLEGABLE PARA EL NÚMERO DEL ACERO
         self.lista_acero = ttk.Combobox(self.disenio_cortante,state="readonly")
         self.lista_acero.grid(column=5, row=9, padx=2, pady=2)
-        
+
         """-------------------------------------------------------------------------------
         -------------------------------------------------------------------------------"""
         # BOTÓN DE CÁLCULO
