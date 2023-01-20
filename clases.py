@@ -23,7 +23,11 @@ class muro:
         self.ld = float(ld)
         self.cargas = list(cargas)
         self.geometria = list(geometria)
-        self.info_acero = {2:32,3:71,4:129,5:199,6:284,7:387,
+        self.info_acero_h = {2:32,3:71,4:129,5:199,6:284,7:387,
+                           8:510,9:645,10:819,11:1006,14:1452,18:2581}
+        self.info_acero_v = {2:32,3:71,4:129,5:199,6:284,7:387,
+                           8:510,9:645,10:819,11:1006,14:1452,18:2581}
+        self.info_acero_eB = {2:32,3:71,4:129,5:199,6:284,7:387,
                            8:510,9:645,10:819,11:1006,14:1452,18:2581}
     
     def calcular(self,y):
