@@ -2,6 +2,8 @@
 Importación de librerías
 -------------------------------------------------------"""
 from math import *
+import numpy as np
+import pandas as pd
 """-------------------------------------------------------
 CARACTERÍSTICAS DE UN MURO:
 ----------------------------------------------------------
@@ -104,7 +106,6 @@ class muro:
         ph=max(ph1,ph2)
         print(ph)
         return ph
-    
      
     """------------------------------------------------
     # PASO 5: Calcula refuerzo vertical
@@ -165,6 +166,67 @@ class muro:
     def calcularAreaAceroFlex(self, Ag, Pu):
         ast = (0.75 * 0.65 * 0.85 * self.fc * Ag - Pu) / (0.85 * self.fc * 0.75 * 0.65 - 0.75 * 0.65 * self.fy)
         return ast    
+    
+    def cuantiaEb(self,w,r):
+        pEb = (w/r)*100
+        return pEb
+    
+    def calcularNbarrasEb(self,x,y):
+        AstEb = self.info_acero_eB.pop(y)
+        
+        Nbarras = x/(AstEb/1000000)
+        
+        return Nbarras
+    
+    def beta(self):
+        
+        fcb=self.fc
+        
+        if fcb >= 17 and fcb <=28 :
+            beta=0.85
+        elif fcb >= 56:
+            beta=0.65
+        else:
+            beta=0.85-0.05*((fcb-28)/7)
+            
+        return beta
+    
+    def DistanciaCapa1(self,Cr,DiaBarra):
+        
+        Dc1 = Cr + (DiaBarra/2)
+        return Dc1
+ 
+    def generarTabla(self,Lw,Anchoeb,Largoeb,alma,sep,Cr,DiaBarra,capas):
+        
+        #VARIACIÓN DE LA DISTANCIA DEL BLOQUE DE COMPRESIÓN
+        C = np.arange(0,Lw,0.05)
+            
+        #CALCULO DE LA FUERZA EN EL BLOQUE DE COMPRESION
+        beta = self.beta()
+        Lalma=Largoeb+alma
+        Cc = list(map(lambda x: 0.85*self.fc*beta*x*Anchoeb*1000 if (x <= Largoeb) else (0.85*self.fc*beta*(Largoeb*Anchoeb+(x-Largoeb)*self.geometria[3])*1000 if x > Largoeb and x <= Lalma else 0.85*self.fc*beta*(Largoeb*Anchoeb+alma*self.geometria[3]+(x-Largoeb-alma)*Anchoeb)*1000),C))
+
+        Dc = np.arange(float(self.DistanciaCapa1(Cr,DiaBarra)),Largoeb,sep)
+        print(Dc)
+        print(len(Dc))
+        lista_capas = []
+        
+        # Cantidad de elementos de Dc = Cantidad de capas
+        for i in range(capas):
+            
+            e = 0.003*((C-Dc[i])/C)
+            
+            lista_capas.append(e)
+        
+        listaeps = pd.DataFrame(lista_capas)
+        listaeps =  listaeps.T
+        
+        dataset = pd.DataFrame({'C': C,'a': Cc})
+        
+        dataset_final = dataset.join(listaeps)      
+        #dataset_final.to_excel("output.xlsx", sheet_name='Prueba') 
+        
+        return dataset_final
 
 """-------------------------------------------------------
 PROGRAMA PRINCIPAL:
@@ -176,5 +238,6 @@ PROGRAMA PRINCIPAL:
 # m1.calcularCuantiaVertical()
 # m1.calcularSeparacion(3,6,2)
 
-m1 = muro(28,420,200,1,[4,1.28,15.25],[31.5,3.5,5,0.3,0.05])
-print(m1.calcularAreaAceroFlex(m1.calcularAgBorde(0.5,0.5), m1.calcularPuAxial(0.5)))
+m1 = muro(28,420,200,1,[1.2,1.136,1.192],[31.5,3.5,4,0.25,0.05])
+res = m1.generarTabla(4,0.4,0.7,2.6,0.144,0.05,0.0222,5)
+print(res)
